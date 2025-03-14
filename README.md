@@ -32,7 +32,8 @@ This R script is designed for a comprehensive analysis of the 'Daxguard' dataset
 
 ### Evaluation Metrics  
 P-value: Indicates statistical significance in multivariate level using 95% confidence level.  
-b-value: 
+b-value: Represents the magnitude and direction of 'slope' of independent variable(s)
+
 ### Version of the Modeling Software:  
 - **R:** 4.3.2  
 - **dplyr:** 1.1.4  
