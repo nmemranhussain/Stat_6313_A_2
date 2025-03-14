@@ -13,3 +13,40 @@ This R script is designed for a comprehensive analysis of the 'Daxguard' dataset
 **Purpose:** The purpose of this project is to analyze the impact of age and gender on systemic differences within the Daxguard dataset, using simple and main effects models.  
 **Intended Users:** Data Analysts, Data scientists, machine learning enthusiasts, educators.  
 **Out-of-scope Uses:** The model is not intended for production use in any critical applications or real-time decision-making systems.
+
+## Data Description
+
+| **Variable Name**       | **Model Role** | **Measurement Level**  | **Description**                                            |
+|-------------------------|----------------|------------------------|------------------------------------------------------------|
+| Age	                    | Predictor	     | Continuous	            | Represents the age of the individual                       |
+| Gender	                | Predictor	     | Categorical	          | Categorizes individuals by gender (Male, Female)           |
+| Sysdiff	                | Response	     | Continuous	            | Measures the systemic differences observed in individuals  |
+
+**Dataset Name:** Daxguard.dat  
+**Number of Samples:** 400    
+**Features Used:** 'Age', 'Gender'   
+**Target Variable used:** 'Sysdiff'  
+
+### Architecture  
+- This model card utilizes linear model such as **'Analysis of Variance (ANOVA) & Analysis of Covariance (ANCOVA)'**.
+
+### Evaluation Metrics  
+P-value: Indicates statistical significance in multivariate level using 95% confidence level.  
+
+### Version of the Modeling Software:  
+- **R:** 4.3.2  
+- **dplyr:** 1.1.4  
+
+## Quantitative Analysis  
+
+### Interpretation 
+
+
+
+
+
+
+
+
+
+
