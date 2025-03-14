@@ -1,0 +1,124 @@
+> # Load the data
+> daxguard_25 <- read.table("Daxguard.txt", header=TRUE)
+> Daxguard$Gender <- as.factor(Daxguard$Gender)
+> summary(daxguard_25)
+    Gender               Age           Sysdiff     
+ Length:300         Min.   :25.00   Min.   : 0.00  
+ Class :character   1st Qu.:35.00   1st Qu.:17.00  
+ Mode  :character   Median :48.00   Median :25.00  
+                    Mean   :48.48   Mean   :24.30  
+                    3rd Qu.:61.25   3rd Qu.:30.25  
+                    Max.   :74.00   Max.   :49.00  
+> 
+> # Combined Gender Analysis 
+> daxguard.lm <- lm(Sysdiff ~ Age + Gender, data=daxguard_25)
+> summary(daxguard.lm)
+
+Call:
+lm(formula = Sysdiff ~ Age + Gender, data = daxguard_25)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-21.8985  -5.9434   0.8762   5.8250  21.7865 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 27.55945    1.78924  15.403  < 2e-16 ***
+Age         -0.01281    0.03442  -0.372     0.71    
+GenderM     -5.27650    0.99369  -5.310 2.15e-07 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 8.597 on 297 degrees of freedom
+Multiple R-squared:  0.08776,	Adjusted R-squared:  0.08162 
+F-statistic: 14.29 on 2 and 297 DF,  p-value: 1.191e-06
+
+> 
+> # Male only analysis
+> males <- subset(daxguard_25, Gender == "M")
+> males.lm <- lm(Sysdiff ~ Age, data = males)
+> summary(males.lm)
+
+Call:
+lm(formula = Sysdiff ~ Age, data = males)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-15.2394  -3.4848   0.7188   3.6788  11.8140 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept) -0.91833    1.46704  -0.626    0.532    
+Age          0.45940    0.02862  16.053   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 5.124 on 148 degrees of freedom
+Multiple R-squared:  0.6352,	Adjusted R-squared:  0.6327 
+F-statistic: 257.7 on 1 and 148 DF,  p-value: < 2.2e-16
+
+> 
+> # Female only analysis
+> females <- subset(daxguard_25, Gender == "F")
+> females.lm <- lm(Sysdiff ~ Age, data = females)
+> summary(females.lm)
+
+Call:
+lm(formula = Sysdiff ~ Age, data = females)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-13.4141  -3.1312  -0.7177   4.0263  11.3953 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 51.42638    1.36466   37.68   <2e-16 ***
+Age         -0.51191    0.02735  -18.71   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 4.764 on 148 degrees of freedom
+Multiple R-squared:  0.703,	Adjusted R-squared:  0.7009 
+F-statistic: 350.2 on 1 and 148 DF,  p-value: < 2.2e-16
+
+> 
+> # Plot of Ancova
+> plot(1, type = "n", 
++      xlab = "Age", ylab = "Sysdiff",
++      xlim = c(min(Daxguard$Age), max(Daxguard$Age)),
++      ylim = c(min(Daxguard$Sysdiff), max(Daxguard$Sysdiff)))
+> abline(females.lm, lty = 1)
+> abline(males.lm, lty = 2)
+> legend("topright", legend = c("Females", "Males"), lty = c(1, 2))
+> 
+> # Simple effect of Age for males i.e slope (Gender is same, Age is different)
+> predict(males.lm, data.frame(Gender = "M", Age = 30)) -
++   predict(males.lm, data.frame(Gender = "M", Age = 29))
+        1 
+0.4593961 
+> 
+> # Simple Effect of Gender=Female (Gender is different, Age is same )
+> predict(daxguard.lm, data.frame(Gender = "F", Age = mean(Daxguard$Age))) - 
++   predict(daxguard.lm, data.frame(Gender = "M", Age = mean(Daxguard$Age)))
+       1 
+5.276504 
+> 
+> # Main Effect of Age
+> (predict(daxguard_lm, data.frame(Gender="M", Age=40)) - 
++     predict(daxguard_lm, data.frame(Gender="M", Age=39)) + 
++     predict(daxguard_lm, data.frame(Gender="F", Age=40)) - 
++     predict(daxguard_lm, data.frame(Gender="F", Age=39)))/2
+          1 
+-0.02625882 
+> 
+> # Main effect of Gender
+> predict(daxguard_lm, data.frame(Gender="F", Age=48.48)) - 
++   predict(daxguard_lm, data.frame(Gender="M", Age=48.48))
+       1 
+5.255609 
+> 
+> # Expected difference in Sysdiff between a male whos age is 30 and a female whose age is 25
+> predict(daxguard_lm, data.frame(Gender="M", Age=30)) - predict(daxguard_lm, data.frame(Gender="F", Age=25))
+        1 
+-25.76498 
+> 
